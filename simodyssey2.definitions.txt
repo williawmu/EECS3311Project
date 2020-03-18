@@ -1,0 +1,164 @@
+system simodyssey2
+-- 4 August 2019
+
+-- SimOdyssey Project specifications:
+
+  -- The game is played in test mode using a random generator
+  -- with a deterministically generated seed.
+  -- (The normal game that is not being implemented in this project
+  -- uses a random generator with a non-deterministically 
+  -- generated seed).
+
+  -- The system consists of a two-dimensional grid of sectors.
+  -- Entities are randomly allocated to sectors in the grid, 
+  -- except for the explorer and blackhole
+
+  -- Movable entities can move through the GALAXY and interact
+  -- with other entities.
+  -- Stationary entities stay in one place and
+  -- interact with the movable entities.
+  -- The explorer is a movable entity controlled by the user.
+
+  -- Upon each valid command that constitute a turn
+  -- the system shall output the current abstract state of the game
+  -- (and also a table representation of the galaxy).
+
+  -- Invalid commands give error messages.
+
+  -- Queries shall display results only, not the system state.
+
+  -- IMPORTANT: Read the provided documentation for more details of system behavior.
+ 
+---------------------------------------------------------------------
+-- SimOdyssey System Types
+---------------------------------------------------------------------
+
+type DIRECTION = {N, NE, E, SE, S, SW, W, NW}
+                  --movement directions
+
+type THRESHOLD     = 1..101
+                  --values for specifying thresholds in test mode             
+
+---------------------------------------------------------------------
+-- SimOdyssey User Commands
+---------------------------------------------------------------------
+
+test(a_threshold:THRESHOLD ; 
+		j_threshold:THRESHOLD; m_threshold:THRESHOLD;
+		b_threshold:THRESHOLD ; p_threshold:THRESHOLD)
+   -- Starts a new game in test mode provided game
+   -- has not been started yet or is over.
+   -- Test mode uses a deterministic random generator and displays
+   -- the abstract state of the game.
+   -- Allows the setting of threshold values to populate the board initially
+   -- (between 1 and 101 non-decreasing), e.g
+	-- a_threshold: 20, i.e. generate Asteroids for 1..19
+	-- j_threshold: 40, i.e. generate Janitaurs for 20..39
+	-- m_threshold: 50, i.e. generate Malevolents for 40..49
+	-- b_threshold: 60, i.e. generate Benigns for 50..59
+	-- p_threshold: 70, i.e. generate Planets for 60..69
+	-- a random number of 70 to 100 generates no moveable entities
+        -- If the random number generated a number from 1 to 100,
+	-- if the number is in the interval from 1 (inclusive) 
+        -- to the first number (exclusive), an asteroid
+        -- is created, first number (inclusive) to second
+        -- number (exclusive) is janitaur, second number (inclusive)
+        -- to third number (exclusive) is malevolent, third number
+	-- (inclusive) to fourth number (exclusive) is
+	-- benign, fourth number (inclusive) to the 
+	-- fifth number (exclusive) is planet and fifth number
+        -- (inclusive) to 101 (exclusive) is nothing.
+   -- Note that this command will not cause a turn to pass/occur.
+
+play
+   -- Starts a new game using test(3,5,7,15,30)
+   -- provided a game has not been started yet or is over.
+   -- Play mode displays only the board and key messages as outputs
+   -- and not the complete abstract state.
+
+abort		       	        
+   -- Ends the game prematurely. Only valid when game is
+   -- in progress.
+	
+move (dir: DIRECTION)				        
+    -- Moves the explorer in a given direction.
+    -- A game has to be in progress and the sector
+    -- to travel to is not full.
+    -- Note that this command will cause a turn to pass/occur.
+    -- After the explorer moves, other moveable entities whose clock
+    -- time (rest) is zero also act in id order, i.e. 1, 2, ..
+    -- In test mode: displays entity actions, abstract state,
+    -- then board. 
+                  
+land		    		
+    -- Lands the explorer on a planet to check for life on planet.
+    -- A game has to be in progress, the explorer is not already 
+    -- landed and there must be a planet with a yellow dwarf in the 
+    -- current sector where that planet has not been landed on yet.
+    -- If there are multiple planets in this sector, land on the one
+    -- that has not been landed on yet with the lowest id.
+    -- Note that this command will cause a turn to pass/occur.
+    -- Asteroid and Malevolent cannot affect the explorer
+    -- when it is landed.
+    -- After the explorer land, other moveable entities whose clock
+    -- time (rest) is zero also act in id order, i.e. 1, 2, ..
+    -- In test mode: displays entity actions, abstract state,
+    -- then board.
+
+liftoff		    				        
+    -- Lifts the explorer off a planet.
+    -- A game has to be in progress and the explorer is landed
+    -- on a planet which also has a yellow dwarf in the same
+    -- sector that cannot support life.
+    -- The explorer remains in its quadrant, but can now move.
+    -- Note that this command will cause a turn to pass/occur.
+    -- After the explorer liftoff, other moveable entities whose clock
+    -- time (rest) is zero also act in id order, i.e. 1, 2, ..
+    -- In test mode: displays entity actions, abstract state,
+    -- then board.
+
+pass		  				      
+    -- Lets the explorer pass a turn.
+    -- Note that this command will cause a turn to pass/occur
+    -- and other entities can affect the explorer.
+    -- After the explorer pass, other moveable entities whose clock
+    -- time (rest) is zero also act in id order, i.e. 1, 2, ..
+    -- In test mode: displays entity actions, abstract state,
+    -- then board.
+
+wormhole			
+    -- Tunnels the explorer to a random sector (first open quadrant).
+    -- A game has to be in progress and there must be
+    -- a wormhole in the current sector.
+    -- Note that this command will cause a turn to pass/occur
+    -- and other entities can affect the explorer.
+    -- After the explorer wormholes, other moveable entities whose 
+    -- clock time (rest) is zero also act in id order, i.e. 1, 2, ..
+    -- In test mode: displays entity actions, abstract state,
+    -- then board.
+
+--toggle_RNG_out
+    -- Toggles the RNG out flag.
+    -- When enabled, if any commands result in the board being output,
+    -- then additional information about the RNG usage is appended
+    -- at the very end.
+    -- There will be a list with entities in the form of (W->X:[Y,Z]).
+    -- If the RNG is not used that turn, then "none" will
+    -- be appended for that section.
+    -- The order of the tuples (left-to-right then up-to-down)
+    -- determine the order of usage of the RNG.
+    -- W represents the entity using the RNG (where it can be
+    -- in the form of any movable entity's alphabet or "G"
+    -- denoting the galaxy).
+    -- The RNG generates a number from Y to Z and X is the
+    -- actual value it generated.
+
+---------------------------------------------------------------------
+-- SimOdyssey Queries
+---------------------------------------------------------------------
+
+status			
+     -- Displays explorer's energy, life and sector.
+     -- Note that this command does not cause a turn to pass/occur
+
+

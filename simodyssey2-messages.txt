@@ -1,0 +1,111 @@
+In the event there are conflicting information between the oracle and this document, the oracle takes priority. Please report any conflicting/invalid information you find.
+
+(VALID) COMMAND-SPECIFIC MESSAGES
+--------------------------------------------------------
+Below are different messages that may occur when using different commands and they are valid:
+
+Initial Message:
+1.
+“Welcome! Try test(3,5,7,15,30)”
+
+status:
+1. (Where explorer is not landed.)  
+“Explorer status report:Travelling at cruise speed at [X,Y,Z]
+Life units left:V, Fuel units left:W”
+2. (Where explorer is landed.)
+“Explorer status report:Stationary on planet surface at [3,1,3] 
+Life units left:3, Fuel units left:3”
+
+X, Y, Z are the row, column and quadrant respectively of where the explorer is and V and W are the current life and fuel of the explorer.
+
+land:
+1. (Where life is found on the planet)  
+“Tranquility base here - we've got a life!”
+2. (Where no life is found on the planet)
+“Explorer found no life as we know it at Sector:X:Y” where X and Y are the row and column denoting the sector the explorer landed on a not visited planet attached to a yellow dwarf.
+
+liftoff
+1. 
+“Explorer has lifted off from planet at Sector:X:Y” where X and Y are the row and column denoting the sector the explorer’s location.
+
+abort:
+1.
+“Mission aborted. Try test(3,5,7,15,30)”
+
+Game is over:
+1.
+“The game has ended. You can start a new game.”
+
+DEATH MESSAGES
+--------------------------------------------------------
+Below are different death messages each entity may have listed in priority:
+
+EXPLORER:
+1. (Out of fuel.) “Explorer got lost in space - out of fuel at Sector:X:Y” where X and Y are the row and column where the explorer ran out of fuel.
+2. (Death due to blackhole.) “Explorer got devoured by blackhole (id: -1) at Sector:3:3”
+3. (Death due to asteroid.) “Explorer got destroyed by asteroid (id: Z) at Sector:X:Y” where X and Y are the row and column where the explorer got hit by an asteroid and Z is the asteroid id.
+4. (Death due to malevolent.) “Explorer got lost in space - out of life support at Sector:X:Y” where X and Y are the row and column where the explorer ran out of life (due to malevolent).
+
+BENIGN:
+1. (Out of fuel.) “Benign got lost in space - out of fuel at Sector:X:Y” where X and Y are the row and column where the benign ran out of fuel.
+2. (Death due to blackhole.) “Benign got devoured by blackhole (id: -1) at Sector:3:3”
+3. (Death due to asteroid.) “Benign got destroyed by asteroid (id: Z) at Sector:X:Y” where X and Y are the row and column where the benign got hit by an asteroid and Z is the asteroid id.
+
+MALEVOLENT:
+1. (Out of fuel.) “Malevolent got lost in space - out of fuel at Sector:X:Y” where X and Y are the row and column where the malevolent ran out of fuel.
+2. (Death due to blackhole.) “Malevolent got devoured by blackhole (id: -1) at Sector:3:3”
+3. (Death due to asteroid.) “Malevolent got destroyed by asteroid (id: Z) at Sector:X:Y” where X and Y are the row and column where the malevolent got hit by an asteroid and Z is the asteroid id.
+4. (Death due to benign.) “Malevolent got destroyed by benign (id: Z) at Sector:X:Y”  where X and Y are the row and column where the malevolent got destroyed by a benign and Z is the benign id.
+
+JANITAUR:
+1. (Out of fuel.) “Janitaur got lost in space - out of fuel at Sector:X:Y” where X and Y are the row and column where the janitaur ran out of fuel.
+2. (Death due to blackhole.)  “Janitaur got devoured by blackhole (id: -1) at Sector:3:3”
+3. (Death due to asteroid.) “Janitaur got destroyed by asteroid (id: Z) at Sector:X:Y” where X and Y are the row and column where the janituar got hit by an asteroid and Z is the asteroid id.
+
+ASTEROID:
+1. (Death due to blackhole.)  “Asteroid got devoured by blackhole (id: -1) at Sector:3:3”
+2. (Death due to janitaur.)  “Asteroid got imploded by janitaur (id: Z) at Sector:X:Y” where X and Y are the row and column where the asteroid got destroyed by a janitaur and Z is the janitaur id.
+
+PLANET:
+1. (Death due to blackhole.) “Planet got devoured by blackhole (id: -1) at Sector:3:3”
+
+ERROR MESSAGES
+--------------------------------------------------------
+Below are possible error messages for the second line. Note that valid command message (like landing) are not indicated here. They are listed in order of priority. X and Y can be 1..5
+
+ABORT
+1. "Negative on that request:no mission in progress."
+
+LAND
+1. "Negative on that request:no mission in progress."
+2. "Negative on that request:already landed on a planet at Sector:X:Y"
+3. "Negative on that request:no yellow dwarf at Sector:X:Y"
+4. "Negative on that request:no planets at Sector:X:Y"
+5. "Negative on that request:no unvisited attached planet at Sector:X:Y"
+
+LIFTOFF
+1. "Negative on that request:no mission in progress."
+2. "Negative on that request:you are not on a planet at Sector:X:Y"
+
+MOVE
+1. "Negative on that request:no mission in progress."
+2. "Negative on that request:you are currently landed at Sector:X:Y"
+3. "Cannot transfer to new location as it is full."
+
+PASS
+1. "Negative on that request:no mission in progress."
+
+PLAY
+1. "To start a new mission, please abort the current one first."
+
+STATUS
+1. "Negative on that request:no mission in progress."
+
+TEST
+1. "To start a new mission, please abort the current one first." 
+2. "Thresholds should be non-decreasing order."
+
+WORMHOLE
+1. "Negative on that request:no mission in progress."
+2. "Negative on that request:you are currently landed at Sector:X:Y"
+3. "Explorer couldn't find wormhole at Sector:X:Y"
